@@ -1,3 +1,16 @@
+<?php
+
+// Wyłączenie wyświetlania błędów
+
+// error_reporting(0);
+
+session_start();
+if(isset($_SESSION['login'])){
+	header('Location: /panel.php');
+	exit();
+}
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,19 +18,20 @@
 	<meta charset="utf-8" />
 </head>
 <body>
-<?php
+	<div class="container">
+		<?php 
 
-// Tymczasowy plik, docelowo ekran logowania
+		if(isset($_SESSION['error'])){ 
+			echo '<p>' . $_SESSION['error'] . '</p>';
+			unset($_SESSION['error']); 
+		}
 
-// Wyłączenie wyświetlania błędów
-
-error_reporting(0);
-
-include_once 'functions/Category.php';
-
-$category = new Category('benke');
-echo $category->insert();
-
-?>
+		?>
+		<form method="post" action="login.php">
+			<label>Login: <input type="text" name="login"></label>
+			<label>Hasło: <input type="text" name="password"></label>
+			<input type="submit" name="submit" value="Zaloguj">
+		</form>
+	</div>
 </body>
 </html>

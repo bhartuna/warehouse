@@ -11,27 +11,29 @@ class Category{
 
 	public function __construct($name){
 		$this->name = $name;
+		$this->object = new UniversalConnect();
+		$this->connect = $this->object->doConnect();	
 	}
 
-	public function insert(){
-		$this->object = new UniversalConnect();
-		$this->connect = $this->object->doConnect();
-		if($this->connect == false){
-			return 'Błąd połączenia z bazą danych';
-		}
-		else{
+	public function __destruct(){
+		$this->query->close();
+		$this->connect->close();
+	}
+
+	public function add(){
+			if($this->connect == false){
+				return 'Błąd połączenia z bazą danych';
+			}
+			else{
 			$this->query = $this->connect->prepare("INSERT INTO pw_category (id, name) VALUES (NULL, ?)");
 			$this->query->bind_param("s", $this->name);
 			if($this->query->execute() == false){
-				return 'Błąd podczas wprowadzania danych';
+				return 'Błąd podczas wykonywania komendy';
 			}
 			else{
 				return 'Dane zostały wprowadzone';
 			}
-			$this->query->close();
-			$this->connect->close();
 		}
-		
 	}
 
 	public function delete(){
@@ -44,13 +46,11 @@ class Category{
 			$this->query = $this->connect->prepare("DELETE FROM pw_category WHERE name = ?");
 			$this->query->bind_param("s", $this->name);
 			if($this->query->execute() == false){
-				return 'Błąd podczas usuwania danych';
+				return 'Błąd podczas wykonywania komendy';
 			}
 			else{
 				return 'Dane zostały usunięte';
 			}
-			$this->query->close();
-			$this->connect->close();	
 		}
 	}
 
