@@ -16,11 +16,16 @@ class User{
 	public function __construct($login, $password){
 		$this->login = $login;
 		$this->password = $password;
+		$this->object = new UniversalConnect();
+		$this->connect = $this->object->doConnect();
+	}
+
+	public function __destruct(){
+		$this->query->close();
+		$this->connect->close();
 	}
 
 	public function login(){
-		$this->object = new UniversalConnect();
-		$this->connect = $this->object->doConnect();
 		if($this->connect == false){
 			return 'Błąd połączenia z bazą danych';
 		}
@@ -40,8 +45,6 @@ class User{
 					return 'Błędne dane logowania';
 				}
 			}
-			$this->query->close();
-			$this->connect->close();
 		}	
 	}
 

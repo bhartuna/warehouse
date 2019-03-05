@@ -21,10 +21,10 @@ class Category{
 	}
 
 	public function add(){
-			if($this->connect == false){
-				return 'Błąd połączenia z bazą danych';
-			}
-			else{
+		if($this->connect == false){
+			return 'Błąd połączenia z bazą danych';
+		}
+		else{
 			$this->query = $this->connect->prepare("INSERT INTO pw_category (id, name) VALUES (NULL, ?)");
 			$this->query->bind_param("s", $this->name);
 			if($this->query->execute() == false){

@@ -11,6 +11,7 @@ else if(!isset($_POST['login']) || !isset($_POST['password'])){
 }
 
 include_once 'functions/User.php';
+include_once 'functions/Log.php';
 
 $login = $_POST['login'];
 $password = $_POST['password'];
@@ -21,11 +22,15 @@ if(isset($submit)){
 	$result = $user->login();
 	if($result[0] === true){
 		$_SESSION['login'] = $result[2];
+		$log = new Log($login, true);
+		$log->save();
 		header('Location: /panel.php');
 		exit();
 	}
 	else{
 		$_SESSION['error'] = $result;
+		$log = new Log($login, false);
+		$log->save();
 		header('Location: /');
 		exit();
 	}
