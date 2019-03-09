@@ -8,9 +8,6 @@ class User{
 	private $login;
 	private $object;
 	private $password;
-	private $result;
-	private $role;
-	private $row;
 	private $query;
 
 	public function __construct($login, $password){
@@ -21,7 +18,7 @@ class User{
 	}
 
 	public function __destruct(){
-		$this->query->close();
+		$query->close();
 		$this->connect->close();
 	}
 
@@ -30,20 +27,16 @@ class User{
 			return 'Błąd połączenia z bazą danych';
 		}
 		else{
-			$this->query = $this->connect->prepare("SELECT id, login, role FROM pw_user WHERE login = ? AND password = MD5(?)");	
-			$this->query->bind_param("ss", $this->login, $this->password);
-			if($this->query->execute() == false){
-				return 'Błąd podczas wyszukiwania danych';
+			$query = $this->connect->prepare("SELECT id, login, role FROM pw_user WHERE login = ? AND password = MD5(?) LIMIT 1");	
+			$query->bind_param("ss", $this->login, $this->password);
+			$query->execute();
+			$query->bind_result($s_id, $s_login, $s_role);
+			$query->fetch();
+			if(isset($s_id)){
+				return array(true, $s_id, $s_login, $s_role);
 			}
 			else{
-				$this->result = $this->query->get_result();
-				if($this->result->num_rows == 1){
-					$this->row = $this->result->fetch_assoc();
-					return array(true, $this->row['id'], $this->row['login'], $this->row['role']);
-				}
-				else{
-					return 'Błędne dane logowania';
-				}
+				return 'Błędne dane';
 			}
 		}	
 	}
