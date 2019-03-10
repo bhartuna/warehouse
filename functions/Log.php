@@ -24,26 +24,26 @@ class Log{
 	}
 
 	public function __destruct(){
-		$query_i->close();
 		$this->connect->close();
 	}
 
 	public function save(){
-		$query_s = $this->connect->prepare("SELECT login FROM pw_user WHERE login = ? LIMIT 1");
-		$query_s->bind_param("s", $this->login);
-		$query_s->execute();
-		$query_s->bind_result($s_login);
-		$query_s->fetch();
+		$this->query_s = $this->connect->prepare("SELECT login FROM pw_user WHERE login = ? LIMIT 1");
+		$this->query_s->bind_param("s", $this->login);
+		$this->query_s->execute();
+		$this->query_s->bind_result($s_login);
+		$this->query_s->fetch();
 		if(isset($s_login)){
 			$this->login = $s_login;
 		}
 		else{
 			$this->login = NULL;
 		}
-		$query_s->close();
-		$query_i = $this->connect->prepare("INSERT INTO pw_log (id, login, ip, date_log, status_log) VALUES (NULL, ?, ?, ?, ?)");
-		$query_i->bind_param("sssi", $this->login, $this->ip, DATE('Y-m-d'), $this->status);
-		$query_i->execute();
+		$this->query_s->close();
+		$this->query_i = $this->connect->prepare("INSERT INTO pw_log (id, login, ip, date_log, time_log, status_log) VALUES (NULL, ?, ?, ?, ?, ?)");
+		$this->query_i->bind_param("ssssi", $this->login, $this->ip, DATE('Y-m-d'), DATE('H:i:s'), $this->status);
+		$this->query_i->execute();
+		$this->query_i->close();
 	}
 
 }

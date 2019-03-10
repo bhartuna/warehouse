@@ -11,13 +11,14 @@ class UniversalConnect implements IConnectInfo{
 	private $connect;
 	
 	public function doConnect(){
-		$this->connect = new mysqli($this->host, $this->user, $this->pass, $this->dbname);
-		if(mysqli_connect_error()){
+		$this->connect = new mysqli($this->host, $this->user, $this->pass, $this->dbname);	
+		if(mysqli_connect_errno()){
 			return false;	
 		}
 		else{
 			return $this->connect;
-		}
+		}	
+
 	}
 
 }

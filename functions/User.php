@@ -17,28 +17,25 @@ class User{
 		$this->connect = $this->object->doConnect();
 	}
 
-	public function __destruct(){
-		$query->close();
-		$this->connect->close();
-	}
-
 	public function login(){
 		if($this->connect == false){
-			return 'Błąd połączenia z bazą danych';
+			return 'err_1';
 		}
 		else{
-			$query = $this->connect->prepare("SELECT id, login, role FROM pw_user WHERE login = ? AND password = MD5(?) LIMIT 1");	
-			$query->bind_param("ss", $this->login, $this->password);
-			$query->execute();
-			$query->bind_result($s_id, $s_login, $s_role);
-			$query->fetch();
+			$this->query = $this->connect->prepare("SELECT id, login, role FROM pw_user WHERE login = ? AND password = MD5(?) LIMIT 1");	
+			$this->query->bind_param("ss", $this->login, $this->password);
+			$this->query->execute();
+			$this->query->bind_result($s_id, $s_login, $s_role);
+			$this->query->fetch();
 			if(isset($s_id)){
 				return array(true, $s_id, $s_login, $s_role);
 			}
 			else{
-				return 'Błędne dane';
+				return 'err_3';
 			}
+			$this->query->close();
 		}	
+		$this->connect->close();
 	}
 
 }

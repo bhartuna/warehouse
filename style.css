@@ -1,0 +1,17 @@
+*{
+	margin: 0px;
+	padding: 0px;
+}
+.error{
+	height: 40px;
+	opacity: 0.0;
+	transition: 0.5s;
+	-moz-transition: 0.5s;
+	-webkit-transition: 0.5s;
+}
+.error--show{
+	opacity: 1.0;
+}
+.error p{
+	line-height: 40px;
+}

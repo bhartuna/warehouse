@@ -15,23 +15,33 @@ include_once 'functions/Log.php';
 
 $login = $_POST['login'];
 $password = $_POST['password'];
-$submit = $_POST['submit'];
 
-if(isset($submit)){
+if($login == '' || $password == ''){
+	$_SESSION['error'] = 'err_2';
+	header('Location: /');
+	exit();
+}
+
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	$user = new User($login, $password);
 	$result = $user->login();
-	if($result[0] === true){
+	if($result == 'err_1'){
+		$_SESSION['error'] = 'err_1';
+		header('Location: /');
+		exit();
+	}
+	else if($result == 'err_3'){
+		$_SESSION['error'] = 'err_3';
+		$log = new Log($login, false);
+		$log->save();
+		header('Location: /');
+		exit();
+	}
+	else{
 		$_SESSION['login'] = $result[2];
 		$log = new Log($login, true);
 		$log->save();
 		header('Location: /panel.php');
-		exit();
-	}
-	else{
-		$_SESSION['error'] = $result;
-		$log = new Log($login, false);
-		$log->save();
-		header('Location: /');
 		exit();
 	}
 }

@@ -16,7 +16,6 @@ class Category{
 	}
 
 	public function __destruct(){
-		$this->query->close();
 		$this->connect->close();
 	}
 
@@ -33,12 +32,11 @@ class Category{
 			else{
 				return 'Dane zostały wprowadzone';
 			}
+			$this->query->close();
 		}
 	}
 
 	public function delete(){
-		$this->object = new UniversalConnect();
-		$this->connect = $this->object->doConnect();
 		if($this->connect == false){
 			return 'Błąd połączenia z bazą danych';
 		}
@@ -51,6 +49,7 @@ class Category{
 			else{
 				return 'Dane zostały usunięte';
 			}
+			$this->query->close();
 		}
 	}
 
