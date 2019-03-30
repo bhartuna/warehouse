@@ -4,52 +4,31 @@ include_once 'UniversalConnect.php';
 
 class Category{
 	
-	private $name;
-	private $connect;
-	private $object;
-	private $query;
+	private $conn;
+	private $query_s;
 
-	public function __construct($name){
-		$this->name = $name;
-		$this->object = new UniversalConnect();
-		$this->connect = $this->object->doConnect();	
+	public function __construct(){
+		$this->conn = UniversalConnect::doConnect();
 	}
 
 	public function __destruct(){
-		$this->connect->close();
+		$this->conn->close();
 	}
-
-	public function add(){
-		if($this->connect == false){
-			return 'Błąd połączenia z bazą danych';
+	
+	public function select(){
+		if($this->conn == false){
+			return 'err_1';
 		}
 		else{
-			$this->query = $this->connect->prepare("INSERT INTO pw_category (id, name) VALUES (NULL, ?)");
-			$this->query->bind_param("s", $this->name);
-			if($this->query->execute() == false){
-				return 'Błąd podczas wykonywania komendy';
+			$this->query_s = "SELECT c.name AS name, IFNULL(SUM(p.count_product), 0) AS count FROM pw_category AS c LEFT JOIN pw_product AS p ON c.id = p.category_id GROUP BY p.category_id";
+			$result = $this->conn->query($this->query_s);
+			if ($result->num_rows > 0) {
+				while($row = $result->fetch_assoc()) {
+       				$cat_array[$row['name']] = $row['count'];
+   				}
+				return $cat_array;
+				$this->query_s->close();
 			}
-			else{
-				return 'Dane zostały wprowadzone';
-			}
-			$this->query->close();
-		}
-	}
-
-	public function delete(){
-		if($this->connect == false){
-			return 'Błąd połączenia z bazą danych';
-		}
-		else{
-			$this->query = $this->connect->prepare("DELETE FROM pw_category WHERE name = ?");
-			$this->query->bind_param("s", $this->name);
-			if($this->query->execute() == false){
-				return 'Błąd podczas wykonywania komendy';
-			}
-			else{
-				return 'Dane zostały usunięte';
-			}
-			$this->query->close();
 		}
 	}
 

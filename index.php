@@ -1,8 +1,6 @@
 <?php
 
-// Wyłączenie wyświetlania błędów
-
-// error_reporting(0);
+error_reporting(0);
 
 session_start();
 if(isset($_SESSION['login'])){
@@ -27,6 +25,7 @@ include_once 'functions/Error.php';
 		<div class="error">
 			<p><?php if(isset($_SESSION['error'])){ $error = new Error($_SESSION['error']); echo $error->show(); unset($_SESSION['error']); } ?></p>
 		</div>
+		<p><?php echo phpversion(); ?></p>
 		<form class="form" method="post" action="login.php">
 			<label>Login: <input class="form__login" type="text" name="login"></label>
 			<label>Hasło: <input class="form__password" type="password" name="password"></label>

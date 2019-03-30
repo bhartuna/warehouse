@@ -20,6 +20,9 @@ class Error{
 			case 'err_3':
 				$this->result = 'Błędne dane logowania';
 				break;
+			case 'err_4':
+				$this->result = 'Błąd podczas wyszukiwania danych';
+				break;
 			default:
 				$this->result = 'Nieznany błąd';
 		}

@@ -24,7 +24,7 @@ if($login == '' || $password == ''){
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	$user = new User($login, $password);
-	$result = $user->login();
+	$result = $user->select();
 	if($result == 'err_1'){
 		$_SESSION['error'] = 'err_1';
 		header('Location: /');
@@ -33,14 +33,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	else if($result == 'err_3'){
 		$_SESSION['error'] = 'err_3';
 		$log = new Log($login, false);
-		$log->save();
+		$log->select();
 		header('Location: /');
 		exit();
 	}
 	else{
 		$_SESSION['login'] = $result[2];
 		$log = new Log($login, true);
-		$log->save();
+		$log->select();
 		header('Location: /panel.php');
 		exit();
 	}
