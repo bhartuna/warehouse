@@ -23,6 +23,12 @@ class Error{
 			case 'err_4':
 				$this->result = 'Błąd podczas wyszukiwania danych';
 				break;
+			case 'err_5':
+				$this->result = 'Podana nazwa już występuje w bazie';
+				break;
+			case 'err_6':
+				$this->result = 'Nie masz wystarczających uprawnień';
+				break;
 			default:
 				$this->result = 'Nieznany błąd';
 		}

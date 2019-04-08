@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			deleteBox[0].style.top = this.parentElement.offsetTop - 10 + 'px';
 			deleteBox[0].style.left = this.parentElement.offsetLeft + 840 + 'px';
 			deleteBox[0].classList.add('showDeleteBox');
-			deleteCategory[0].parentElement.setAttribute('href', 'panel/functions/category-delete.php/?name=' + categoryName);
+			deleteCategory[0].parentElement.setAttribute('href', '/panel/functions/category-delete.php/?name=' + categoryName);
 		});	
 	}
 	cancelDelete[0].addEventListener('click', function(){

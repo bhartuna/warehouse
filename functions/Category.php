@@ -42,14 +42,24 @@ class Category{
 	public function insert(){
 		$this->query_i = $this->conn->prepare("INSERT INTO pw_category (id, name) VALUES (NULL, ?)");
 		$this->query_i->bind_param("s", $this->name);
-		$this->query_i->execute();
+		if($this->query_i->execute()){
+			return true;
+		}
+		else{
+			return false;
+		}
 		$this->query_i->close();
 	}
 
 	public function delete(){
 		$this->query_d = $this->conn->prepare("DELETE FROM pw_category WHERE name = ?");
 		$this->query_d->bind_param("s", $this->name);
-		$this->query_d->execute();
+		if($this->query_d->execute()){
+			return true;
+		}
+		else{
+			return false;
+		}
 		$this->query_d->close();
 	}
 

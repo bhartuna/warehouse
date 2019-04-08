@@ -8,9 +8,9 @@ if(!isset($_SESSION['login'])){
 	exit();
 }
 
+include_once 'functions/Error.php';
 include_once 'functions/Category.php';
-
-echo 'Witaj ' . $_SESSION['login'];
+include_once 'functions/Product.php';
 
 ?>
 
@@ -21,10 +21,15 @@ echo 'Witaj ' . $_SESSION['login'];
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-	<link href="panel/style.css" rel="stylesheet" type="text/css" media="all" />
-	<script src="panel/script.js" defer></script>
+	<link href="/panel/style.css" rel="stylesheet" type="text/css" media="all" />
+	<script src="/panel/script.js" defer></script>
 </head>
 <body>
+	<?php
+
+	echo 'Witaj ' . $_SESSION['login'];
+
+	?>
 	<a href="logout.php"><button>Wyloguj</button></a>
 	<div class="container">
 		<div class="deleteBox">
@@ -43,19 +48,33 @@ echo 'Witaj ' . $_SESSION['login'];
 			<div class="category__name">
 				<p><?php echo $key; ?> (<?php echo $value; ?>)</p>
 			</div>
-			<div class="category__show"></div>
+			<a <?php  echo 'href="/panel.php/?showCategory=' . $key . '"'; ?>><div class="category__show"></div></a>
 			<div class="category__edit"></div>
 			<div class="category__delete"></div>
 		</div>
 		<?php
 		
+			if($_GET['showCategory'] == $key){
+
+				$product = new Product();
+				$prod_list = $product->setCategory($_GET['showCategory']);
+				$prod_list = $product->select();
+				foreach($prod_list as $prod_key => $prod_value){
+
+		?>		
+		<p><?php echo $prod_key; ?> (<?php echo $prod_value; ?>)</p>
+		<?php
+
+				}
+			}
 		}
 		
 		?>
-		<form method="get" action="panel/functions/category-add.php">
+		<form method="get" action="/panel/functions/category-add.php">
 			<label>Nazwa: <input type="text" name="category"></label>
 			<input type="submit" name="submit" value="Zapisz">
 		</form>
+		<p><?php if(isset($_SESSION['error'])){ $error = new Error($_SESSION['error']); echo $error->show(); unset($_SESSION['error']); } else if(isset($_SESSION['statement'])){ echo $_SESSION['statement']; unset($_SESSION['statement']); } ?></p>
 	</div>
 </body>
 </html>
