@@ -5,7 +5,9 @@ include_once 'UniversalConnect.php';
 class Product{
 
 	private $category;
+	private $count;
 	private $name;
+	private $query_i;
 	private $query_s;
 
 	public function __construct(){
@@ -20,7 +22,8 @@ class Product{
 		$this->category = $category;
 	}
 
-	public function setName($name){
+	public function setName($count, $name){
+		$this->count = $count;
 		$this->name = $name;
 	}
 
@@ -42,7 +45,15 @@ class Product{
 	}
 
 	public function insert(){
-
+		$this->query_i = $this->conn->prepare("INSERT INTO pw_product (id, name, count_product, category_id) VALUES (NULL, ?, ?, (SELECT id FROM pw_category WHERE name = ?))");
+		$this->query_i->bind_param("sis", $this->name, $this->count, $this->category);
+		if($this->query_i->execute()){
+			return true;
+		}
+		else{
+			return false;
+		}
+		$this->query_i->close();
 	}
 
 	public function update(){

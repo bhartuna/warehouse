@@ -70,11 +70,30 @@ include_once 'functions/Product.php';
 		}
 		
 		?>
+		
+		<p><?php if(isset($_SESSION['error'])){ $error = new Error($_SESSION['error']); echo $error->show(); unset($_SESSION['error']); } else if(isset($_SESSION['statement'])){ echo $_SESSION['statement']; unset($_SESSION['statement']); } ?></p>
 		<form method="get" action="/panel/functions/category-add.php">
 			<label>Nazwa: <input type="text" name="category"></label>
-			<input type="submit" name="submit" value="Zapisz">
+			<input type="submit" name="submit" value="Dodaj">
 		</form>
-		<p><?php if(isset($_SESSION['error'])){ $error = new Error($_SESSION['error']); echo $error->show(); unset($_SESSION['error']); } else if(isset($_SESSION['statement'])){ echo $_SESSION['statement']; unset($_SESSION['statement']); } ?></p>
+		<form method="get" action="/panel/functions/product-add.php">
+			<label>Nazwa: <input type="text" name="product"></label>
+			<label>Ilość: <input type="number" name="count"></label>
+			<select name="categorySelect">
+			<?php
+
+			foreach($cat_list as $key => $value){
+
+			?>
+				<option><?php echo $key; ?></option>
+			<?php
+
+			}
+
+			?>	
+			</select>
+			<input type="submit" name="submit" value="Dodaj">
+		</form>
 	</div>
 </body>
 </html>
